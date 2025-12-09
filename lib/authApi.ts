@@ -1,5 +1,5 @@
 import api from "./api";
-
+console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
 export const loginUser = async (data: Object) => {
   const res = await api.post("/api/auth/login", data);
   return res.data;
@@ -26,11 +26,11 @@ export const verifyUserAPI = async ({ token }: { token: string }) => {
 };
 
 export const loginUserWithGoogle = () => {
-  window.location.href = `${process.env.BACKEND_URL}/api/auth/google`;
+  window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/google`;
 };
 
 export const loginUserWithX = () => {
-  window.location.href = `${process.env.BACKEND_URL}/api/auth/x`;
+  window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/x`;
 };
 
 export const forgotPassword = async (data: Object) => {
