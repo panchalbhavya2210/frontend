@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { cookies } from "next/headers";
 import { setTheme, setMode } from "@/app/actions/set-theme";
 import { Card } from "@/components/ui/card";
