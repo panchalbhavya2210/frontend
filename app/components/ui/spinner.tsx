@@ -26,7 +26,7 @@ export default function Spinner({
       className={clsx(
         "rounded-full animate-spin border-t-transparent",
         sizeClasses[size],
-        color
+        color,
       )}
     />
   );

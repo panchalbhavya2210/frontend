@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { cookies } from "next/headers";
-import { setTheme, setMode } from "@/app/actions/set-theme";
+import { setMode, setTheme } from "@/app/actions/set-theme";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 
@@ -31,7 +31,7 @@ export default async function AppearancePage() {
   const currentMode = cookieStore.get("mode")?.value || "light";
 
   return (
-    <div className="max-w-6xl mx-auto py-10 space-y-10">
+    <div className="max-w-6xl mx-auto space-y-10">
       <h1 className="text-3xl font-semibold">Appearance</h1>
       <p className="text-muted-foreground">
         Customize theme colors and dark mode.
@@ -44,7 +44,7 @@ export default async function AppearancePage() {
         <div className="flex gap-4">
           {modes.map((m) => (
             <form
-              key={m.id}
+              key={m.toString()}
               action={async () => {
                 "use server";
                 await setMode(m.id);
@@ -70,9 +70,9 @@ export default async function AppearancePage() {
         <h2 className="text-xl font-medium mb-4">Color Themes</h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {colorThemes.map((t, index) => (
+          {colorThemes.map((t) => (
             <form
-              key={index}
+              key={t.toString()}
               action={async () => {
                 "use server";
                 await setTheme(t.id);
@@ -89,9 +89,9 @@ export default async function AppearancePage() {
 
                   {/* Swatches */}
                   <div className="flex gap-2 mb-4">
-                    {t.colors.map((c, i) => (
+                    {t.colors.map((c) => (
                       <div
-                        key={i}
+                        key={c.toString()}
                         className="h-7 w-7 rounded-md border shadow-sm"
                         style={{ backgroundColor: c }}
                       />

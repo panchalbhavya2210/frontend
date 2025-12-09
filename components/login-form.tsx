@@ -22,6 +22,7 @@ import { useSearchParams } from "next/navigation";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function LoginForm({
   className,
@@ -38,7 +39,7 @@ export function LoginForm({
     if (search.get("error") === "no-token") {
       toast.error("Please login again");
     }
-  }, []);
+  }, [search]);
 
   // Form
   const {
@@ -100,12 +101,12 @@ export function LoginForm({
         <Field>
           <div className="flex items-center">
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <a
-              href="#"
+            <Link
+              href="/forgot-password"
               className="ml-auto text-sm underline-offset-4 hover:underline"
             >
               Forgot your password?
-            </a>
+            </Link>
           </div>
 
           <div className="relative">

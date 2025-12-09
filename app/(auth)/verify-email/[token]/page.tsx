@@ -62,8 +62,8 @@ export default function Page() {
             {status === "success"
               ? "Email Verified"
               : status === "error"
-              ? "Verification Failed"
-              : "Verifying Email"}
+                ? "Verification Failed"
+                : "Verifying Email"}
           </CardTitle>
           <CardDescription>
             {status === "success" &&

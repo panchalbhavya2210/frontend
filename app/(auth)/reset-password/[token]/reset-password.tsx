@@ -38,10 +38,15 @@ export default function ResetPasswordPage() {
   });
 
   const onSubmit = async (data: ResetSchemaType) => {
+    if (!token) {
+      toast.error("Invalid or expired reset link.");
+      return;
+    }
+
     try {
       await dispatch(
         resetPasswordThunk({
-          token: token?.toString()!,
+          token: token as string,
           password: data.password,
         })
       ).unwrap();

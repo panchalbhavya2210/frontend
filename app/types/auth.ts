@@ -23,6 +23,6 @@ export interface ForgotResponse {
 }
 
 export interface ResetResponse {
-  token: string;
+  token?: string | undefined;
   password: string;
 }

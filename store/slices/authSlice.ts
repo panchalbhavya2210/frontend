@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
   forgotPassword,
   getProfile,
@@ -8,7 +8,7 @@ import {
   resetPassword,
   verifyUserAPI,
 } from "@/lib/authApi";
-import {
+import type {
   LoginResponse,
   User,
   ProfileResponse,
@@ -16,8 +16,6 @@ import {
   ForgotResponse,
   ResetResponse,
 } from "@/app/types/auth";
-import { RegisterSchemaType } from "@/lib/validators/schema";
-import { string } from "zod";
 
 interface AuthState {
   user: User | null;
@@ -31,6 +29,25 @@ const initialState: AuthState = {
   error: null,
 };
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "response" in error &&
+    (error as any).response?.data
+  ) {
+    return (
+      (error as any).response.data.message ||
+      (error as any).response.data.error ||
+      "Unexpected server error"
+    );
+  }
+
+  return typeof error === "string" ? error : "Something went wrong";
+}
+
 export const loginThunk = createAsyncThunk<
   User,
   { email: string; password: string },
@@ -39,9 +56,8 @@ export const loginThunk = createAsyncThunk<
   try {
     const res: LoginResponse = await loginUser(form);
     return res.user;
-  } catch (err: any) {
-    const backendMessage = err?.response?.data?.message || "Login failed";
-    return thunkAPI.rejectWithValue(backendMessage);
+  } catch (err: unknown) {
+    return thunkAPI.rejectWithValue(getErrorMessage(err));
   }
 });
 
@@ -51,10 +67,8 @@ export const loadProfileThunk = createAsyncThunk<User, void>(
     try {
       const res: ProfileResponse = await getProfile();
       return res.user;
-    } catch (err: any) {
-      const backendMessage =
-        err?.response?.data?.message || "Loading Profile Failed";
-      return thunkAPI.rejectWithValue(backendMessage);
+    } catch (err: unknown) {
+      return thunkAPI.rejectWithValue(getErrorMessage(err));
     }
   }
 );
@@ -67,10 +81,8 @@ export const registerUserThunk = createAsyncThunk<
   try {
     const res: RegisterResponse = await registerUser(form);
     return res.user;
-  } catch (err: any) {
-    const backendMessage =
-      err?.response?.data?.message || "Loading Profile Failed";
-    return thunkAPI.rejectWithValue(backendMessage);
+  } catch (err: unknown) {
+    return thunkAPI.rejectWithValue(getErrorMessage(err));
   }
 });
 
@@ -81,10 +93,8 @@ export const forgotPasswordThunk = createAsyncThunk<
   try {
     const res: ForgotResponse = await forgotPassword(form);
     return res;
-  } catch (error: any) {
-    const backendMessage =
-      error?.response?.data?.message || "Forgot password failed";
-    return thunkAPI.rejectWithValue(backendMessage);
+  } catch (err: unknown) {
+    return thunkAPI.rejectWithValue(getErrorMessage(err));
   }
 });
 
@@ -95,12 +105,11 @@ export const resetPasswordThunk = createAsyncThunk<
 >("auth/reset-password", async (form, thunkAPI) => {
   try {
     const { token, password } = form;
+
     const res: ResetResponse = await resetPassword({ token, password });
     return res;
-  } catch (error: any) {
-    const backendMessage =
-      error?.response?.data?.message || "Forgot password failed";
-    return thunkAPI.rejectWithValue(backendMessage);
+  } catch (err: unknown) {
+    return thunkAPI.rejectWithValue(getErrorMessage(err));
   }
 });
 
@@ -112,9 +121,8 @@ export const logoutThunk = createAsyncThunk<
   try {
     await logoutUser();
     return true;
-  } catch (err: any) {
-    const backendMessage = err?.response?.data?.message || "Logout failed";
-    return thunkAPI.rejectWithValue(backendMessage);
+  } catch (err: unknown) {
+    return thunkAPI.rejectWithValue(getErrorMessage(err));
   }
 });
 
@@ -127,10 +135,8 @@ export const verifyUserThunk = createAsyncThunk<
   try {
     const res = await verifyUserAPI({ token });
     return res;
-  } catch (error: any) {
-    const backendMessage =
-      error?.response?.data?.message || "Verification failed";
-    return thunkAPI.rejectWithValue(backendMessage);
+  } catch (err: unknown) {
+    return thunkAPI.rejectWithValue(getErrorMessage(err));
   }
 });
 
