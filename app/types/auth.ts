@@ -17,3 +17,12 @@ export interface LoginResponse {
 export interface ProfileResponse {
   user: User;
 }
+
+export interface ForgotResponse {
+  email: string;
+}
+
+export interface ResetResponse {
+  token: string;
+  password: string;
+}

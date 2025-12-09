@@ -1,27 +1,27 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import ReduxProvider from "@/store/ReduxStoreProvieder";
 
-const geistSans = Geist({
+const outfitSans = Outfit({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("theme")?.value || "blue";
+  const mode = cookieStore.get("mode")?.value || "light";
+
+  const themeClass = mode === "dark" ? `theme-${theme}-dark` : `theme-${theme}`;
   return (
-    <html lang="en">
+    <html lang="en" className={themeClass}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${outfitSans.variable} ${outfitSans.variable} antialiased`}
       >
         <ReduxProvider>{children}</ReduxProvider>
       </body>

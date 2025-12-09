@@ -1,10 +1,14 @@
 import React from "react";
+import { ChangeHandler } from "react-hook-form";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  children: React.ReactNode;
+  type?: string;
+  placeholder?: string;
+  onChange?: ChangeHandler;
+  onBlur?: ChangeHandler;
 }
 
-export default function Input({ ...props }: InputProps) {
+export default function Input(props: InputProps) {
   return (
     <input
       {...props}
